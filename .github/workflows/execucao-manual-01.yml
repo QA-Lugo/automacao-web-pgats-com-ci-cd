@@ -29,7 +29,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          run: npm run report-merge
-
-      - name: Relatório de testes
-        run: npm run report-mocha 
+          name: Gerando relatório de testes
+          path: ./cypress/reports/html
