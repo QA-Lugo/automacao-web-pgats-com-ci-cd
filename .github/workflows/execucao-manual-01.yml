@@ -1,0 +1,36 @@
+name: 'Trabalho final - CI de nível 01'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    # passo a passo das ações do job
+    steps:
+      - uses: actions/checkout@v4
+
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: lts/*
+
+      # simular a instalação das dependencias
+      - name: Instalando Yarn
+        run: npm install -g yarn
+
+      - name: Instalação dependências
+        run: yarn
+
+      - name: Instalando Playwright
+        run: yarn playwright install
+
+      - name: Testes E2E
+        run: yarn run e2e
+
+      # passed, failed, cancelled
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: relatorio-de-testes
+          path: ./playwright-report
