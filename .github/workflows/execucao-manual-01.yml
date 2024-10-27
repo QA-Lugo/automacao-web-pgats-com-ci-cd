@@ -7,30 +7,29 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
 
-    # passo a passo das ações do job
     steps:
       - uses: actions/checkout@v4
 
-      # - uses: actions/setup-node@v4
-      #   with:
-      #     node-version: lts/*
+        #Setup da versão do node
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
 
-      # simular a instalação das dependencias
-      - name: Instalando Yarn
-        run: npm install -g yarn
+      - name: Instalação do npm
+        run: npm install
 
-      - name: Instalação dependências
-        run: yarn
+      - name: Instalando o Cypress
+        run: npm run cy-run
 
-      - name: Instalando Playwright
-        run: yarn playwright install
-
-      - name: Testes E2E
-        run: yarn run e2e
+      #caso dê erro em algum teste, o continue irá seguir executando os demais testes
+        continue-on-error: true
 
       # passed, failed, cancelled
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: relatorio-de-testes
-          path: ./playwright-report
+          run: npm run report-merge
+
+      - name: Relatório de testes
+        run: npm run report-mocha 
