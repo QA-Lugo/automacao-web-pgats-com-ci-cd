@@ -25,7 +25,7 @@ jobs:
       #caso dê erro em algum teste, o continue irá seguir executando os demais testes
         continue-on-error: true
 
-      # passed, failed, cancelled
+      # gera relatório de testes se status for passed ou failed
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
